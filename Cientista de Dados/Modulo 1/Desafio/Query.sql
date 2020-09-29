@@ -1,7 +1,7 @@
 -- Q8
 -- Qual a média salarial nessa empresa?
 SELECT
-    avg(salario)
+    round(avg(salario),2)
 FROM
     empregado
 ;
@@ -23,7 +23,7 @@ FROM
     JOIN departamento ON departamento.dnumero = empregado.dno
     JOIN projeto ON projeto.dnum = departamento.dnumero
     JOIN trabalha_em ON trabalha_em.essn = empregado.ssn
-        AND trabalha_em.pno = projeto.pnumero
+       AND trabalha_em.pno = projeto.pnumero
 WHERE
     departamento.dnumero = 5
     AND projeto.pjnome = 'ProductX'
@@ -45,8 +45,9 @@ WHERE
 -- Q11
 -- Quais os nomes de todos os empregados que são diretamente supervisionados por Franklin Wong
 SELECT
-    t1.*
-    ,t2.*
+    t1.pnome
+    ,t2.pnome
+	,t2.unome
 FROM
     empregado t1
     JOIN empregado t2 ON t1.superssn = t2.ssn
@@ -62,10 +63,8 @@ SELECT
     ,trabalha_em.horas
 FROM
     empregado
-    JOIN departamento ON departamento.dnumero = empregado.dno
-    JOIN projeto ON projeto.dnum = departamento.dnumero
-    JOIN trabalha_em ON trabalha_em.essn = empregado.ssn
-        AND trabalha_em.pno = projeto.pnumero
+	JOIN trabalha_em ON trabalha_em.essn = empregado.ssn
+    JOIN projeto ON projeto.pnumero = trabalha_em.pno
 WHERE
     projeto.pjnome = 'Newbenefits'
 ORDER BY
@@ -75,12 +74,15 @@ ORDER BY
 -- Q13
 -- Qual é a soma dos salários de todos os empregados do departamento chamado 'Research'?
 SELECT
-    sum(empregado.salario)
+	departamento.dnome
+    ,sum(empregado.salario)
 FROM
     empregado
     JOIN departamento ON departamento.dnumero = empregado.dno
 WHERE
     departamento.dnome = 'Research'
+group by
+	departamento.dnome
 ;
 
 -- Q14
